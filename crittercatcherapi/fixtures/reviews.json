@@ -1,0 +1,11 @@
+[
+    {
+        "model": "crittercatcherapi.review",
+        "pk": 1,
+        "fields": {
+            "requestor": 1,
+            "request": 1,
+            "review": "went great!"
+        }
+    }
+]

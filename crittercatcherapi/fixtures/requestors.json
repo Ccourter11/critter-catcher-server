@@ -1,0 +1,11 @@
+[
+    {
+        "model": "crittercatcherapi.requestor",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "bio": "Me"
+
+        }
+    }
+]

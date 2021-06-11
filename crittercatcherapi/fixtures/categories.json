@@ -1,0 +1,23 @@
+[
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 1,
+        "fields": {
+            "label": "small"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 2,
+        "fields": {
+            "label": "medium"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 3,
+        "fields": {
+            "label": "large"
+        }
+    }
+]
