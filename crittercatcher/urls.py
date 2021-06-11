@@ -18,6 +18,7 @@ from django.conf.urls import include
 from django.urls import path
 from crittercatcherapi.views import register_user, login_user
 from crittercatcherapi.views import UsersView
+from crittercatcherapi.models import *
 from rest_framework import routers
 
 
