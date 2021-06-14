@@ -49,20 +49,7 @@ class UsersView(ViewSet):
             users, many=True, context={'request': request})
         return Response(serializer.data)
 
-    def update(self, request, pk=None):
-        """Handle PUT requests for a game
-        Returns:
-            Response -- Empty body with 204 status code
-        """
-       
-        user = Requestor.objects.get(pk=pk)
-        user.bio = request.data["bio"]
-        user.created_on = request.data["created_on"]
-        user.active = request.data["active"]
-
-        user.save()
-    
-        return Response({}, status=status.HTTP_204_NO_CONTENT)        
+      
 
 
         
