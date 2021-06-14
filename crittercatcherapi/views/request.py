@@ -4,7 +4,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from crittercatcherapi.models import Request, Requestor, Category
+from crittercatcherapi.models import Request, Requestor, Category, category
 
 class RequestSerializer(serializers.ModelSerializer):
     """JSON serializer for request
@@ -53,4 +53,24 @@ class Requests(ViewSet):
             serializer = RequestSerializer(request, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
-            return HttpResponseServerError(ex)            
+            return HttpResponseServerError(ex)
+
+    def list(self, request):
+        """Handle GET requests to request resource
+        Returns:
+            Response -- JSON serialized list of games
+        """
+        # Get all request records from the database
+        requests = Request.objects.all()
+
+        # Support filtering requests by category
+        #    http://localhost:8000/request?category=1
+        #
+        # That URL will retrieve all small request
+        category = self.request.query_params.get('category', None)
+        if category is not None:
+            requests = requests.filter(category__id=category)
+
+        serializer = RequestSerializer(
+            requests, many=True, context={'request': request})
+        return Response(serializer.data)                    
