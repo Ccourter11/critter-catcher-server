@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
 from crittercatcherapi.views import register_user, login_user
-from crittercatcherapi.views import UsersView
+from crittercatcherapi.views import *
 from crittercatcherapi.models import *
 from rest_framework import routers
 
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UsersView, 'user')
+router.register(r'requests', Requests, 'request')
 
 
 urlpatterns = [

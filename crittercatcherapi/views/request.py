@@ -16,7 +16,7 @@ class RequestSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category',)
         depth = 1
 
-class Request(ViewSet):
+class Requests(ViewSet):
     def create(self, request):
         requestor = Requestor.objects.get(user=request.auth.user)
 
