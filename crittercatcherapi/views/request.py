@@ -1,3 +1,4 @@
+import re
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.http import HttpResponseServerError
@@ -73,4 +74,29 @@ class Requests(ViewSet):
 
         serializer = RequestSerializer(
             requests, many=True, context={'request': request})
-        return Response(serializer.data)                    
+        return Response(serializer.data)  
+
+    def update(self, request, pk=None):
+        """Handle PUT requests for a request
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        requestor = Requestor.objects.get(user=request.auth.user)
+
+        # Do mostly the same thing as POST, but instead of
+        # creating a new instance of Game, get the game record
+        # from the database whose primary key is `pk`
+        new_request = Request.objects.get(pk=pk)
+        new_request.title = request.data["title"]
+        new_request.description = request.data["description"]
+        new_request.location = request.data["location"]
+        new_request.date = request.data["date"]
+        new_request.requestor = requestor
+
+        category = Category.objects.get(pk=request.data["categoryId"])
+        new_request.Category = category
+        new_request.save()
+
+        # 204 status code means everything worked but the
+        # server is not sending back any data in the response
+        return Response({}, status=status.HTTP_204_NO_CONTENT)                      
