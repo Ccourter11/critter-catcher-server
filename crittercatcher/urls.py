@@ -27,6 +27,7 @@ router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'users', UsersView, 'user')
 router.register(r'requests', Requests, 'request')
 router.register(r'categories', Categories, 'category')
+router.register(r'reviews', Reviews, 'review')
 
 
 urlpatterns = [
