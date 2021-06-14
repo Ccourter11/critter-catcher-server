@@ -99,4 +99,21 @@ class Requests(ViewSet):
 
         # 204 status code means everything worked but the
         # server is not sending back any data in the response
-        return Response({}, status=status.HTTP_204_NO_CONTENT)                      
+        return Response({}, status=status.HTTP_204_NO_CONTENT)     
+
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a single game
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            request = Request.objects.get(pk=pk)
+            request.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Request.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)                     
