@@ -60,7 +60,6 @@ def register_user(request):
 
     # Now save the extra info in the crittercatcherapi_requestor table
     requestor = Requestor.objects.create(
-        bio=req_body['bio'],
         user=new_user
     )
 
