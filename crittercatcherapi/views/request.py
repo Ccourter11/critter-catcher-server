@@ -76,7 +76,7 @@ class Requests(ViewSet):
         return Response(serializer.data)  
 
     def update(self, request, pk=None):
-        """Handle PUT requests for a request
+        """Handle PnUT requests for a request
         Returns:
             Response -- Empty body with 204 status code
         """
