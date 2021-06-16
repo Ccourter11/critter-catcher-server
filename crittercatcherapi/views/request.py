@@ -26,6 +26,7 @@ class Requests(ViewSet):
         request.description = request.data["description"]
         request.location = request.data["location"]
         request.date = request.data["date"]
+        request.image_url = request.data["image_url"]
         request.requestor = requestor
         
 
@@ -90,6 +91,7 @@ class Requests(ViewSet):
         new_request.description = request.data["description"]
         new_request.location = request.data["location"]
         new_request.date = request.data["date"]
+        new_request.image_url = request.data["image_url"]
         new_request.requestor = requestor
 
         category = Category.objects.get(pk=request.data["categoryId"])
