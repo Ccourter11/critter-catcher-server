@@ -9,7 +9,7 @@ class Request(models.Model):
     date = models.DateTimeField(max_length=50)
     requestor = models.ForeignKey("Requestor", on_delete=models.CASCADE)
     image_url = models.CharField(max_length=50)
-    is_complete = models.BooleanField()
+    is_complete = models.BooleanField(null=True)
     category = models.ForeignKey("Category", on_delete=models.CASCADE)
 
 
