@@ -20,22 +20,24 @@ class Requests(ViewSet):
     def create(self, request):
         requestor = Requestor.objects.get(user=request.auth.user)
 
-        request = Request()
+        new_request = Request()
         
-        request.title = request.data["title"]
-        request.description = request.data["description"]
-        request.location = request.data["location"]
-        request.date = request.data["date"]
-        request.requestor = requestor
+        new_request.title = request.data["title"]
+        new_request.description = request.data["description"]
+        new_request.location = request.data["location"]
+        new_request.date = request.data["date"]
+        # new_request.image_url = request.data["image_url"]
+        # new_request.is_complete = request.data["is_complete"]
+        new_request.requestor = requestor
         
 
         category = Category.objects.get(pk=request.data["categoryId"])
-        request.Category = category
+        new_request.category = category
 
         try:
 
-            request.save()
-            serializer = RequestSerializer(request, context={'request': request})
+            new_request.save()
+            serializer = RequestSerializer(new_request, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         except ValidationError as ex:
@@ -76,7 +78,7 @@ class Requests(ViewSet):
         return Response(serializer.data)  
 
     def update(self, request, pk=None):
-        """Handle PUT requests for a request
+        """Handle PnUT requests for a request
         Returns:
             Response -- Empty body with 204 status code
         """
@@ -90,6 +92,7 @@ class Requests(ViewSet):
         new_request.description = request.data["description"]
         new_request.location = request.data["location"]
         new_request.date = request.data["date"]
+        # new_request.image_url = request.data["image_url"]
         new_request.requestor = requestor
 
         category = Category.objects.get(pk=request.data["categoryId"])
