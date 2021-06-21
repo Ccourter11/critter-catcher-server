@@ -7,5 +7,14 @@
             "bio": "Me"
 
         }
+    },
+    {  
+        "model": "crittercatcherapi.requestor",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "bio": "Us"
+
+        }
     }
 ]

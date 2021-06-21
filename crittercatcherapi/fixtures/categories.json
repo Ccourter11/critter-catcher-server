@@ -3,21 +3,21 @@
         "model": "crittercatcherapi.category",
         "pk": 1,
         "fields": {
-            "label": "small"
+            "label": "Small"
         }
     },
     {
         "model": "crittercatcherapi.category",
         "pk": 2,
         "fields": {
-            "label": "medium"
+            "label": "Medium"
         }
     },
     {
         "model": "crittercatcherapi.category",
         "pk": 3,
         "fields": {
-            "label": "large"
+            "label": "Large"
         }
     }
 ]
