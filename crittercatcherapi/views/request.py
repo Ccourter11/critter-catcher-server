@@ -62,8 +62,9 @@ class Requests(ViewSet):
         Returns:
             Response -- JSON serialized list of games
         """
+        crittercatcher_user = Requestor.objects.get(user=request.auth.user)
         # Get all request records from the database
-        requests = Request.objects.all()
+        requests = Request.objects.filter(requestor=crittercatcher_user)
 
         # Support filtering requests by category
         #    http://localhost:8000/request?category=1
