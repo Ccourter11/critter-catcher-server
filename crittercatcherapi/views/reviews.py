@@ -48,3 +48,17 @@ class Reviews(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)        
+
+    def list(self, request):
+        """Handle GET requests to get all reviews 
+        Returns:
+            Response -- JSON serialized list of game types
+        """
+        review = Review.objects.all()
+
+        # Note the addtional `many=True` argument to the
+        # serializer. It's needed when you are serializing
+        # a list of objects instead of a single object.
+        serializer = ReviewSerializer(
+            review, many=True, context={'request': request})
+        return Response(serializer.data) 
