@@ -86,17 +86,17 @@ class Reviews(ViewSet):
         Returns:
             Response -- Empty body with 204 status code
         """
+        
         requestor = Requestor.objects.get(user=request.auth.user)
-
+        
         # Do mostly the same thing as POST, but instead of
         # creating a new instance of Game, get the game record
         # from the database whose primary key is `pk`
-        new_request = Request.objects.get(pk=pk)
-        
-
-        review = Review.objects.get(pk=request.data["reviewId"])
-        new_request.Category = category
-        new_request.save()
+        review = Review.objects.get(pk=pk)
+        review.request = Request.objects.get(pk=request.data["requestId"])
+        review.requestor = requestor
+        review.review = request.data["review"]
+        review.save()
 
         # 204 status code means everything worked but the
         # server is not sending back any data in the response
