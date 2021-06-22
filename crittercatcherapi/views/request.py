@@ -97,7 +97,7 @@ class Requests(ViewSet):
         new_request.requestor = requestor
 
         category = Category.objects.get(pk=request.data["categoryId"])
-        new_request.Category = category
+        new_request.category = category
         new_request.save()
 
         # 204 status code means everything worked but the
