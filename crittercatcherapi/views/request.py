@@ -5,7 +5,8 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from crittercatcherapi.models import Request, Requestor, Category, Review
+from crittercatcherapi.models import Request, Requestor, Category, Review, requestor
+from django.contrib.auth.models import User
 
 class RequestSerializer(serializers.ModelSerializer):
     """JSON serializer for request
@@ -17,7 +18,21 @@ class RequestSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category',)
         depth = 1
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','first_name', 'last_name', )
+
+class RequestorSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+    class Meta:
+        model = Requestor
+        fields = ('id', 'bio','user',)
+        depth = 1
+
+
 class ReviewSerializer(serializers.ModelSerializer):
+    requestor = RequestorSerializer(many=False)
     class Meta:
         model = Review
         fields = ('id', 'review', 'request', 'requestor')        
@@ -31,7 +46,8 @@ class SingleRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
         fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category','reviews',)
-        depth = 1
+        # depth = 1
+
 
 
 
