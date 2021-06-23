@@ -1,10 +1,11 @@
+from crittercatcherapi.models.review import Review
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from crittercatcherapi.models import Request, Requestor, Category
+from crittercatcherapi.models import Request, Requestor, Category, Review
 
 class RequestSerializer(serializers.ModelSerializer):
     """JSON serializer for request
@@ -15,6 +16,24 @@ class RequestSerializer(serializers.ModelSerializer):
         model = Request
         fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category',)
         depth = 1
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ('id', 'review', 'request', 'requestor')        
+
+class SingleRequestSerializer(serializers.ModelSerializer):
+    """JSON serializer for request
+    Arguments:
+        serializer type
+    """
+    reviews = ReviewSerializer(many=True)
+    class Meta:
+        model = Request
+        fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category','reviews',)
+        depth = 1
+
+
 
 class Requests(ViewSet):
     def create(self, request):
@@ -50,9 +69,10 @@ class Requests(ViewSet):
             Response -- JSON serialized game instance
         """
         try:
-            
+            reviews = Review.objects.filter(request=pk)
             request = Request.objects.get(pk=pk)
-            serializer = RequestSerializer(request, context={'request': request})
+            request.reviews = reviews
+            serializer = SingleRequestSerializer(request, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
