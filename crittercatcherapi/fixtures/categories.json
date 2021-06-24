@@ -3,21 +3,92 @@
         "model": "crittercatcherapi.category",
         "pk": 1,
         "fields": {
-            "label": "Small"
+            "label": "Stray Cat"
         }
     },
     {
         "model": "crittercatcherapi.category",
         "pk": 2,
         "fields": {
-            "label": "Medium"
+            "label": "Snake"
         }
     },
     {
         "model": "crittercatcherapi.category",
         "pk": 3,
         "fields": {
-            "label": "Large"
+            "label": "Squirrel"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 4,
+        "fields": {
+            "label": "Bird"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 5,
+        "fields": {
+            "label": "Bat"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 6,
+        "fields": {
+            "label": "Skunk"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 7,
+        "fields": {
+            "label": "Racoon"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 8,
+        "fields": {
+            "label": "Oppossum"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 9,
+        "fields": {
+            "label": "Fox"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 10,
+        "fields": {
+            "label": "Coyote"
+        }
+    }
+    ,
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 11,
+        "fields": {
+            "label": "Armadillo"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 12,
+        "fields": {
+            "label": "Stray Dog"
+        }
+    },
+    {
+        "model": "crittercatcherapi.category",
+        "pk": 13,
+        "fields": {
+            "label": "Unknown"
         }
     }
 ]

@@ -1,10 +1,14 @@
+from crittercatcherapi.models.review import Review
 from django.core.exceptions import ValidationError
 from rest_framework import status
 from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from crittercatcherapi.models import Request, Requestor, Category
+from crittercatcherapi.models import Request, Requestor, Category, Review, requestor
+from django.contrib.auth.models import User
+from django.conf import settings
+import cloudinary
 
 class RequestSerializer(serializers.ModelSerializer):
     """JSON serializer for request
@@ -16,7 +20,45 @@ class RequestSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category',)
         depth = 1
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','first_name', 'last_name', )
+
+class RequestorSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False)
+    class Meta:
+        model = Requestor
+        fields = ('id', 'bio','user',)
+        depth = 1
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    requestor = RequestorSerializer(many=False)
+    class Meta:
+        model = Review
+        fields = ('id', 'review', 'request', 'requestor')        
+
+class SingleRequestSerializer(serializers.ModelSerializer):
+    """JSON serializer for request
+    Arguments:
+        serializer type
+    """
+    reviews = ReviewSerializer(many=True)
+    class Meta:
+        model = Request
+        fields = ('id', 'title', 'location', 'description', 'date', 'requestor','image_url','is_complete', 'category','reviews',)
+        # depth = 1
+
+
+
+
 class Requests(ViewSet):
+    cloudinary.config(
+    cloud_name=settings.CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key=settings.CLOUDINARY_STORAGE['API_KEY'],
+    api_secret=settings.CLOUDINARY_STORAGE['API_SECRET'])
+
     def create(self, request):
         requestor = Requestor.objects.get(user=request.auth.user)
 
@@ -26,7 +68,9 @@ class Requests(ViewSet):
         new_request.description = request.data["description"]
         new_request.location = request.data["location"]
         new_request.date = request.data["date"]
-        # new_request.image_url = request.data["image_url"]
+        # if request.data["image_url"] !="":
+        #     new_request.image_url = cloudinary.uploader.upload(request.data["image_url"])['url']
+        new_request.image_url = cloudinary.uploader.upload(request.data['image_url'])['url']
         # new_request.is_complete = request.data["is_complete"]
         new_request.requestor = requestor
         
@@ -50,9 +94,10 @@ class Requests(ViewSet):
             Response -- JSON serialized game instance
         """
         try:
-            
+            reviews = Review.objects.filter(request=pk)
             request = Request.objects.get(pk=pk)
-            serializer = RequestSerializer(request, context={'request': request})
+            request.reviews = reviews
+            serializer = SingleRequestSerializer(request, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -93,11 +138,12 @@ class Requests(ViewSet):
         new_request.description = request.data["description"]
         new_request.location = request.data["location"]
         new_request.date = request.data["date"]
-        # new_request.image_url = request.data["image_url"]
+        if request.data["image_url"] !="":
+            new_request.image_url = cloudinary.uploader.upload(request.data['image_url'])['url']   
         new_request.requestor = requestor
 
         category = Category.objects.get(pk=request.data["categoryId"])
-        new_request.Category = category
+        new_request.category = category
         new_request.save()
 
         # 204 status code means everything worked but the
