@@ -19,11 +19,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class Reviews(ViewSet):
     def create(self, request):
-        requestor = Requestor.objects.get(user=request.auth.user)
+        
 
         review = Review()
         
-        review.requestor = requestor
+        review.requestor = Requestor.objects.get(user=request.auth.user)
         review.request = Request.objects.get(pk=request.data["requestId"])
         review.review = request.data["review"]
 

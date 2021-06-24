@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from crittercatcherapi.models import Request, Requestor, Category, Review, requestor
 from django.contrib.auth.models import User
+from django.conf import settings
+import cloudinary
 
 class RequestSerializer(serializers.ModelSerializer):
     """JSON serializer for request
@@ -52,6 +54,11 @@ class SingleRequestSerializer(serializers.ModelSerializer):
 
 
 class Requests(ViewSet):
+    cloudinary.config(
+    cloud_name=settings.CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key=settings.CLOUDINARY_STORAGE['API_KEY'],
+    api_secret=settings.CLOUDINARY_STORAGE['API_SECRET'])
+
     def create(self, request):
         requestor = Requestor.objects.get(user=request.auth.user)
 
@@ -61,7 +68,9 @@ class Requests(ViewSet):
         new_request.description = request.data["description"]
         new_request.location = request.data["location"]
         new_request.date = request.data["date"]
-        # new_request.image_url = request.data["image_url"]
+        # if request.data["image_url"] !="":
+        #     new_request.image_url = cloudinary.uploader.upload(request.data["image_url"])['url']
+        new_request.image_url = cloudinary.uploader.upload(request.data['image_url'])['url']
         # new_request.is_complete = request.data["is_complete"]
         new_request.requestor = requestor
         
@@ -129,7 +138,8 @@ class Requests(ViewSet):
         new_request.description = request.data["description"]
         new_request.location = request.data["location"]
         new_request.date = request.data["date"]
-        # new_request.image_url = request.data["image_url"]
+        if request.data["image_url"] !="":
+            new_request.image_url = cloudinary.uploader.upload(request.data['image_url'])['url']   
         new_request.requestor = requestor
 
         category = Category.objects.get(pk=request.data["categoryId"])
